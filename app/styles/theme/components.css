@@ -1,0 +1,143 @@
+/* ===== Program Compare (namespace: pc) ===== */
+
+.pc__tableWrap {
+  overflow: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  background: var(--color-bg-page);
+}
+
+/* ===== TABLE ===== */
+
+.pc__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--font-size-base);
+  background: var(--color-bg-page);
+}
+
+.pc__table th,
+.pc__table td {
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-3) var(--space-4);
+  vertical-align: top;
+  background: var(--color-bg-page);
+  color: var(--color-text-primary);
+}
+
+/* ===== HEADER ===== */
+
+.pc__table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--color-bg-page);
+  font-weight: var(--font-weight-semibold);
+  border-bottom: 1px solid var(--color-border-strong);
+}
+
+/* ===== STICKY FIRST COLUMN ===== */
+
+.pc__table th:first-child,
+.pc__table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--color-bg-page);
+}
+
+/* ===== GROUP ROW ===== */
+
+.pc__groupRow,
+.pc__groupRow td {
+  background: var(--color-bg-soft);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+/* ===== BADGES ===== */
+
+.pc__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-page);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.pc__badge--yes {
+  border-color: rgba(46, 125, 50, 0.25);
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.pc__badge--no {
+  border-color: rgba(198, 40, 40, 0.25);
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+/* ===== BUTTON (brand) ===== */
+
+.pc__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 16px;
+
+  border-radius: 8px;
+  border: 1px solid #000;
+  background: #fff;
+
+  color: #000;
+  font-size: var(--fs-14);
+  font-weight: 500;
+  text-decoration: none;
+
+  transition: background .15s ease, color .15s ease;
+}
+
+.pc__btn:hover {
+  background: #000;
+  color: #fff;
+}
+
+
+.pc__btn:active {
+  transform: translateY(1px);
+}
+/* ===== Actions under table ===== */
+
+.pc__actions {
+  display: grid;
+  grid-template-columns: 20% 40% 40%; /* ровно как у таблицы */
+  padding: 12px 14px;
+  gap: 0;
+}
+
+.pc__actions-col {
+  display: flex;
+  justify-content: flex-start; /* 👈 ключевое */
+}
+/* Subgroup row (внутри группы) */
+.pc__subGroupRow td {
+  background: var(--bg-soft);
+  font-weight: 600;
+  color: var(--text);
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* небольшой визуальный отступ слева, как "вложенность" */
+.pc__subGroupRow td:first-child {
+  padding-left: 28px;
+}
+
