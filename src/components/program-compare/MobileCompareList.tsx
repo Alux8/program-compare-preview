@@ -114,25 +114,53 @@ export default function MobileCompareList({
 
               {isOpen && (
                 <div className="pcMobile__items">
-                  {list.map((p) => (
-                    <div key={p.param_key} className="pcMobile__item">
-                      <div className="pcMobile__paramTitle">{p.param_title}</div>
+                  {list.map((p) => {
+  const isLongText = p.param_key === "характеристика";
 
-                      <div className="pcMobile__row">
-                        <div className="pcMobile__sideLabel">Программа 1</div>
-                        <div className="pcMobile__sideValue">
-                          {formatValue(leftValues[p.param_key], p.param_key, p.param_title)}
-                        </div>
-                      </div>
+  return (
+    <div
+      key={p.param_key}
+      className={`pcMobile__item ${isLongText ? "pcMobile__item--stack" : ""}`}
+    >
+      <div className="pcMobile__paramTitle">{p.param_title}</div>
 
-                      <div className="pcMobile__row">
-                        <div className="pcMobile__sideLabel">Программа 2</div>
-                        <div className="pcMobile__sideValue">
-                          {formatValue(rightValues[p.param_key], p.param_key, p.param_title)}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+      {isLongText ? (
+        <div className="pcMobile__stack">
+          <div className="pcMobile__stackBlock">
+            <div className="pcMobile__sideLabel">Программа 1</div>
+            <div className="pcMobile__sideValue">
+              {formatValue(leftValues[p.param_key], p.param_key, p.param_title)}
+            </div>
+          </div>
+
+          <div className="pcMobile__stackBlock">
+            <div className="pcMobile__sideLabel">Программа 2</div>
+            <div className="pcMobile__sideValue">
+              {formatValue(rightValues[p.param_key], p.param_key, p.param_title)}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="pcMobile__row">
+            <div className="pcMobile__sideLabel">Программа 1</div>
+            <div className="pcMobile__sideValue">
+              {formatValue(leftValues[p.param_key], p.param_key, p.param_title)}
+            </div>
+          </div>
+
+          <div className="pcMobile__row">
+            <div className="pcMobile__sideLabel">Программа 2</div>
+            <div className="pcMobile__sideValue">
+              {formatValue(rightValues[p.param_key], p.param_key, p.param_title)}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+})}
+
                 </div>
               )}
             </div>

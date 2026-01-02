@@ -209,9 +209,15 @@
 
 .pcMobile__row {
   display: grid;
-  grid-template-columns: 110px 1fr;
+  grid-template-columns: 110px minmax(0, 1fr);
   gap: 10px;
   align-items: start;
+}
+
+.pcMobile__row * {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .pcMobile__sideLabel {
@@ -224,4 +230,33 @@
   gap: 8px;
   margin-top: 4px;
 }
+.pcMobile__actions .pc__btn {
+  width: 100%;
+}
+.pcMobile__item--stack .pcMobile__row {
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
 
+.pcMobile__item--stack .pcMobile__sideLabel {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.pcMobile__item--stack .pcMobile__stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pcMobile__item--stack .pcMobile__stackBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pcMobile__sideValue {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
+}
