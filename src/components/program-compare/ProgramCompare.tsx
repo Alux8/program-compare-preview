@@ -1,5 +1,6 @@
 "use client";
-
+import DesktopCompareTable from "./DesktopCompareTable";
+import MobileCompareList from "./MobileCompareList";
 import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -53,7 +54,7 @@ export default function ProgramCompare() {
 const groupedParams = (params as ParamRow[]).reduce<
   Record<string, ParamRow[]>
 >((acc, param) => {
-  const subgroup = param.subgroup || "Общее";
+  const subgroup = param.subgroup || "Без группы";
 
   if (!acc[subgroup]) acc[subgroup] = [];
   acc[subgroup].push(param);
@@ -67,6 +68,7 @@ const groupedParams = (params as ParamRow[]).reduce<
     Record<string, boolean>
   >({});
 
+const [showDiffOnly, setShowDiffOnly] = useState(false);
 
   const toggleSubGroup = (key: string) => {
     setCollapsedSubGroups((prev) => ({
@@ -84,7 +86,48 @@ const groupedParams = (params as ParamRow[]).reduce<
   const rightValues =
     valuesMap[normalizeId(safeRightId)] || valuesMap[pad6(safeRightId)] || {};
 
+    function normalizeForCompare(value: any) {
+  if (value === null || value === undefined) return "";
+
+  // приводим всё к строке
+  let raw = String(value).replace(/\s+/g, " ").trim();
+
+  // считаем прочерки и пустые "нет данных" одинаковым пустым значением
+  const lowered = raw.toLowerCase();
+  if (
+    raw === "—" ||
+    raw === "-" ||
+    raw === "–" ||
+    lowered === "нет" ||
+    lowered === "нет данных" ||
+    lowered === "n/a"
+  ) {
+    return "";
+  }
+
+  // boolean
+  if (typeof value === "boolean") return value ? "1" : "0";
+
+  // числа и "числа строкой" (с пробелами/запятыми)
+  const numCandidate = raw
+    .replace(/\s/g, "")
+    .replace(/[^\d,.\-]/g, "")
+    .replace(",", ".");
+  const num = Number(numCandidate);
+
+  // важно: не превращаем любой текст в 0, только если реально есть цифры
+  if (!Number.isNaN(num) && /[\d]/.test(raw)) return String(num);
+
+  // текст: сравниваем без регистра
+  return lowered;
+}
+
+function isDifferent(leftVal: any, rightVal: any) {
+  return normalizeForCompare(leftVal) !== normalizeForCompare(rightVal);
+}
+
   function formatValue(value: any, _paramKey?: string, paramTitle?: string) {
+    
     if (value === null || value === undefined || value === "") return "—";
 
     const title = (paramTitle || "").toLowerCase();
@@ -120,6 +163,9 @@ const groupedParams = (params as ParamRow[]).reduce<
 
     return String(value);
   }
+  const leftProgramTitle = left?.program_title ?? "Программа 1";
+const rightProgramTitle = right?.program_title ?? "Программа 2";
+const subGroups = Object.keys(groupedParams);
 
   return (
     <section className="border rounded-lg p-6 space-y-4">
@@ -148,8 +194,19 @@ const groupedParams = (params as ParamRow[]).reduce<
           }}
         />
       </div>
-
+      <div className="flex items-center gap-3 text-sm">
+  <label className="flex items-center gap-2 cursor-pointer select-none">
+    <input
+      type="checkbox"
+      checked={showDiffOnly}
+      onChange={(e) => setShowDiffOnly(e.target.checked)}
+    />
+    <span title="Скрывает параметры, значения которых совпадают">Показать только различия</span>
+  </label>
+</div>
+<div className="pc__desktop">
       <div className="pc__tableWrap">
+        <DesktopCompareTable>
         <table className="pc__table">
           <thead>
             <tr>
@@ -162,7 +219,10 @@ const groupedParams = (params as ParamRow[]).reduce<
          <tbody>
   {Object.entries(groupedParams).map(([subgroup, groupParams]) => {
     const isCollapsed = !!collapsedSubGroups[subgroup];
-
+    const hasDiffInSubGroup = groupParams.some((p) =>
+    isDifferent(leftValues[p.param_key], rightValues[p.param_key])
+  );
+    if (showDiffOnly && !hasDiffInSubGroup) return null;
     return (
       <React.Fragment key={subgroup}>
         {/* строка ПОДКАТЕГОРИИ */}
@@ -178,26 +238,35 @@ const groupedParams = (params as ParamRow[]).reduce<
         </tr>
 
         {/* параметры */}
-        {!isCollapsed &&
-          groupParams.map((p) => (
-            <tr key={p.param_key}>
-              <td>{p.param_title}</td>
-              <td>
-                {formatValue(
-                  leftValues[p.param_key],
-                  p.param_key,
-                  p.param_title
-                )}
-              </td>
-              <td>
-                {formatValue(
-                  rightValues[p.param_key],
-                  p.param_key,
-                  p.param_title
-                )}
-              </td>
-            </tr>
-          ))}
+{!isCollapsed &&
+  groupParams
+    .filter(
+      (p) =>
+        !showDiffOnly ||
+        isDifferent(leftValues[p.param_key], rightValues[p.param_key])
+    )
+    .map((p) => (
+      <tr key={p.param_key}>
+        <td>{p.param_title}</td>
+
+        <td>
+          {formatValue(
+            leftValues[p.param_key],
+            p.param_key,
+            p.param_title
+          )}
+        </td>
+
+        <td>
+          {formatValue(
+            rightValues[p.param_key],
+            p.param_key,
+            p.param_title
+          )}
+        </td>
+      </tr>
+    ))}
+
       </React.Fragment>
     );
   })}
@@ -229,7 +298,22 @@ const groupedParams = (params as ParamRow[]).reduce<
 </tbody>
 
         </table>
+        </DesktopCompareTable>
       </div>
+      </div>
+     <div className="pc__mobile">
+  <MobileCompareList
+    leftProgramTitle={left?.program_title ?? "Программа 1"}
+    rightProgramTitle={right?.program_title ?? "Программа 2"}
+    groupedParams={groupedParams}
+    leftValues={leftValues}
+    rightValues={rightValues}
+    formatValue={formatValue}
+    safeLeftId={safeLeftId}
+    safeRightId={safeRightId}
+    showDiffOnly={showDiffOnly}
+  />
+</div>
     </section>
   );
 }
