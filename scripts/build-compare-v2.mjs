@@ -45,7 +45,7 @@ if (!rows.length) {
 
 const headers = Object.keys(rows[0]);
 
-// Точные названия колонок из твоего Excel:
+// Точные названия колонок из Excel:
 const COL_ACTIVE = "Active";
 const COL_ID = "ID программы";
 const COL_TITLE = "Наименование программы";
@@ -86,10 +86,12 @@ for (const r of activeRows) {
     });
   }
 }
+
 const REBUILD_PARAMS = process.argv.includes("--rebuild-params");
 
 fs.mkdirSync(OUT_DIR, { recursive: true });
 fs.writeFileSync(OUT_PROGRAMS, JSON.stringify(programs, null, 2), "utf8");
+
 if (REBUILD_PARAMS) {
   fs.writeFileSync(OUT_PARAMS, JSON.stringify(params, null, 2), "utf8");
   console.log("✅ params rebuilt");

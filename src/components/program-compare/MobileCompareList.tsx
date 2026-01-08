@@ -58,7 +58,6 @@ export default function MobileCompareList({
   safeRightId,
   showDiffOnly,
 }: Props) {
-  // по умолчанию: все подгруппы свернуты
   const [open, setOpen] = useState<Record<string, boolean>>({});
 
   const visibleGroupedParams = useMemo(() => {
