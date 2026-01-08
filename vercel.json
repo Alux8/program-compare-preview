@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/compare-v2-warm",
+      "schedule": "0 6,18 * * *"
+    }
+  ]
+}
