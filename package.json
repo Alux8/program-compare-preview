@@ -1,6 +1,7 @@
 {
   "name": "my-editor-guide",
   "version": "0.1.0",
+  "vercelDeployNonce": "2026-01-08-01"
   "private": true,
   "scripts": {
     "data:v2": "node scripts/build-compare-v2.mjs",
@@ -27,3 +28,4 @@
     "typescript": "^5"
   }
 }
+
