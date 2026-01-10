@@ -61,20 +61,20 @@ export default function MobileCompareList({
   const [open, setOpen] = useState<Record<string, boolean>>({});
 
   const visibleGroupedParams = useMemo(() => {
-  if (!showDiffOnly) return groupedParams;
+    if (!showDiffOnly) return groupedParams;
 
-  const out: Record<string, ParamRow[]> = {};
+    const out: Record<string, ParamRow[]> = {};
 
-  for (const [subgroup, params] of Object.entries(groupedParams)) {
-    const filtered = params.filter((p) =>
-      isDifferent(leftValues[p.param_key], rightValues[p.param_key])
-    );
+    for (const [subgroup, params] of Object.entries(groupedParams)) {
+      const filtered = params.filter((p) =>
+        isDifferent(leftValues[p.param_key], rightValues[p.param_key])
+      );
 
-    if (filtered.length > 0) out[subgroup] = filtered;
-  }
+      if (filtered.length > 0) out[subgroup] = filtered;
+    }
 
-  return out;
-}, [showDiffOnly, groupedParams, leftValues, rightValues]);
+    return out;
+  }, [showDiffOnly, groupedParams, leftValues, rightValues]);
 
   const subGroups = useMemo(
     () => Object.keys(visibleGroupedParams),
@@ -104,61 +104,62 @@ export default function MobileCompareList({
             <div key={sg} className="pcMobile__group">
               <button
                 type="button"
-                className="pcMobile__groupBtn"
+                className={`pcMobile__groupBtn ${isOpen ? "is-open" : ""}`}
                 onClick={() => toggle(sg)}
               >
-                <span className="pcMobile__chev">{isOpen ? "▼" : "▶"}</span>
+                <span className="pcMobile__chev" aria-hidden />
                 <span className="pcMobile__groupTitle">{sg}</span>
               </button>
+
 
               {isOpen && (
                 <div className="pcMobile__items">
                   {list.map((p) => {
-  const isLongText = p.param_key === "характеристика";
+                    const isLongText = p.param_key === "характеристика";
 
-  return (
-    <div
-      key={p.param_key}
-      className={`pcMobile__item ${isLongText ? "pcMobile__item--stack" : ""}`}
-    >
-      <div className="pcMobile__paramTitle">{p.param_title}</div>
+                    return (
+                      <div
+                        key={p.param_key}
+                        className={`pcMobile__item ${isLongText ? "pcMobile__item--stack" : ""}`}
+                      >
+                        <div className="pcMobile__paramTitle">{p.param_title}</div>
 
-      {isLongText ? (
-        <div className="pcMobile__stack">
-          <div className="pcMobile__stackBlock">
-            <div className="pcMobile__sideLabel">Программа 1</div>
-            <div className="pcMobile__sideValue">
-              {formatValue(leftValues[p.param_key], p.param_key, p.param_title)}
-            </div>
-          </div>
+                        {isLongText ? (
+                          <div className="pcMobile__stack">
+                            <div className="pcMobile__stackBlock">
+                              <div className="pcMobile__sideLabel">Программа 1</div>
+                              <div className="pcMobile__sideValue">
+                                {formatValue(leftValues[p.param_key], p.param_key, p.param_title)}
+                              </div>
+                            </div>
 
-          <div className="pcMobile__stackBlock">
-            <div className="pcMobile__sideLabel">Программа 2</div>
-            <div className="pcMobile__sideValue">
-              {formatValue(rightValues[p.param_key], p.param_key, p.param_title)}
-            </div>
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className="pcMobile__row">
-            <div className="pcMobile__sideLabel">Программа 1</div>
-            <div className="pcMobile__sideValue">
-              {formatValue(leftValues[p.param_key], p.param_key, p.param_title)}
-            </div>
-          </div>
+                            <div className="pcMobile__stackBlock">
+                              <div className="pcMobile__sideLabel">Программа 2</div>
+                              <div className="pcMobile__sideValue">
+                                {formatValue(rightValues[p.param_key], p.param_key, p.param_title)}
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="pcMobile__row">
+                              <div className="pcMobile__sideLabel">Программа 1</div>
+                              <div className="pcMobile__sideValue">
+                                {formatValue(leftValues[p.param_key], p.param_key, p.param_title)}
+                              </div>
+                            </div>
 
-          <div className="pcMobile__row">
-            <div className="pcMobile__sideLabel">Программа 2</div>
-            <div className="pcMobile__sideValue">
-              {formatValue(rightValues[p.param_key], p.param_key, p.param_title)}
-            </div>
-          </div>
-        </>
-      )}
-    </div>
-  );
-})}
+                            <div className="pcMobile__row">
+                              <div className="pcMobile__sideLabel">Программа 2</div>
+                              <div className="pcMobile__sideValue">
+                                {formatValue(rightValues[p.param_key], p.param_key, p.param_title)}
+                              </div>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    );
+                  })}
 
                 </div>
               )}

@@ -89,36 +89,44 @@ export default function ProgramCompareV2Client({
 
   return (
     <main className="pcV2">
-      <h1 className="title">Program Compare v2</h1>
-
-      <section className="selectors">
-        <CompareSelectorsV2
-          programs={programs}
-          leftProgram={leftProgram}
-          rightProgram={rightProgram}
-          setLeftProgramId={setLeftId}
-          setRightProgramId={setRightId}
-        />
+      <section className="pcV2">
+        <section className="pcUI__selectors">
+          <CompareSelectorsV2
+            programs={programs}
+            leftProgram={leftProgram}
+            rightProgram={rightProgram}
+            setLeftProgramId={setLeftId}
+            setRightProgramId={setRightId}
+          />
+        </section>
       </section>
 
+
+      {/* checkbox можно показывать всегда, но disabled до выбора */}
+      <label
+        className="pcUI__diffToggle pcV2__checkbox"
+        style={!isReady ? { opacity: 0.6, pointerEvents: "none" } : undefined}
+      >
+        <input
+          type="checkbox"
+          checked={showOnlyDiffs}
+          onChange={(e) => setShowOnlyDiffs(e.target.checked)}
+          disabled={!isReady}
+        />
+        <span title="Скрывает параметры, значения которых совпадают">
+          Оставить только различия
+        </span>
+      </label>
+
       {!isReady ? (
-        <div className="hint">Выберите две программы для сравнения</div>
+        <div className="pc__empty">
+          <div className="pc__emptyTitle">Выберите две программы для сравнения</div>
+          <div className="pc__emptyHint">
+            Начните вводить код или название программы в поля выше
+          </div>
+        </div>
       ) : (
         <>
-          <div className="compareTitle">Сравнение</div>
-
-          {/* ===== controls ===== */}
-          <div className="pcV2__controls">
-            <label className="pcV2__checkbox">
-              <input
-                type="checkbox"
-                checked={showOnlyDiffs}
-                onChange={(e) => setShowOnlyDiffs(e.target.checked)}
-              />
-              <span> Оставить только различия</span>
-            </label>
-          </div>
-
           <div className="pcV2__desktop">
             <DesktopCompareTableV2
               leftProgram={leftProgram!}
@@ -138,6 +146,7 @@ export default function ProgramCompareV2Client({
           </div>
         </>
       )}
+
     </main>
   );
 }

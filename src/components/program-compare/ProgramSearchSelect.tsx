@@ -27,7 +27,6 @@ export default function ProgramSearchSelect({
 
   const [query, setQuery] = useState(selected?.program_title ?? "");
   const [open, setOpen] = useState(false);
-
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -69,27 +68,44 @@ export default function ProgramSearchSelect({
     setOpen(false);
   };
 
+  const clearQuery = () => {
+    setQuery("");
+    setOpen(true);
+  };
+
   return (
-    <div className="border rounded p-4 space-y-2" ref={wrapRef}>
-      <div className="text-sm text-gray-500">{label}</div>
+    <div className="pcV2__searchSelect" ref={wrapRef}>
+      <div className="pcV2__searchSelectLabel">{label}</div>
 
-      <input
-        className="w-full border rounded p-2"
-        value={query}
-        placeholder="Начни вводить название или ID…"
-        onFocus={() => setOpen(true)}
-        onChange={(e) => {
-          setQuery(e.target.value);
-          setOpen(true);
-        }}
-      />
+      <div className="pcV2__searchSelectField">
+        <input
+          className="pcV2__searchSelectInput"
+          value={query}
+          placeholder="Начните вводить код или название программы"
+          onFocus={() => setOpen(true)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setOpen(true);
+          }}
+        />
 
-      <div className="text-xs text-gray-500">ID: {valueId}</div>
+        {query.length > 0 && (
+          <button
+            type="button"
+            className="pcV2__searchSelectClear"
+            onClick={clearQuery}
+            aria-label="Очистить"
+            title="Очистить"
+          >
+            ×
+          </button>
+        )}
+      </div>
 
       {open && (
-        <div className="border rounded mt-2 max-h-64 overflow-auto">
+        <div className="pcV2__searchSelectDropdown">
           {filtered.length === 0 ? (
-            <div className="p-2 text-sm text-gray-500">Ничего не найдено</div>
+            <div className="pcV2__searchSelectEmpty">Ничего не найдено</div>
           ) : (
             filtered.map((p) => {
               const id = String(p.program_id);
@@ -100,13 +116,10 @@ export default function ProgramSearchSelect({
                   key={id}
                   type="button"
                   onClick={() => pick(id)}
-                  className={
-                    "w-full text-left p-2 text-sm border-b last:border-b-0 hover:bg-gray-50 " +
-                    (active ? "bg-gray-100" : "")
-                  }
+                  className={"pcV2__searchSelectItem " + (active ? "is-active" : "")}
                 >
-                  <div className="font-medium">{p.program_title}</div>
-                  <div className="text-xs text-gray-500">ID: {id}</div>
+                  <div className="pcV2__searchSelectTitle">{p.program_title}</div>
+                  <div className="pcV2__searchSelectId">ID: {id}</div>
                 </button>
               );
             })

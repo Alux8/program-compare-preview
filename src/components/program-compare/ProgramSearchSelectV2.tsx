@@ -13,6 +13,8 @@ type Props = {
   valueId: string; // может быть пустым
   onChange: (nextId: string) => void;
 };
+const stripIdPrefix = (title: string) =>
+  title.replace(/^\s*\d{1,6}\s*[—-]\s*/u, "").trim();
 
 export default function ProgramSearchSelectV2({
   label,
@@ -26,14 +28,15 @@ export default function ProgramSearchSelectV2({
   );
 
   const [query, setQuery] = useState("");
-
   const [open, setOpen] = useState(false);
+
   const wrapRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   // если выбрали программу — подставляем название
   // если valueId пустой — очищаем инпут
   useEffect(() => {
-    setQuery(selected?.program_title ?? "");
+    setQuery(selected?.program_title ? stripIdPrefix(selected.program_title) : "");
   }, [selected?.program_title, valueId]);
 
   useEffect(() => {
@@ -73,27 +76,57 @@ export default function ProgramSearchSelectV2({
     setOpen(false);
   };
 
-  return (
-    <div className="pcV2__searchSelect" ref={wrapRef}>
-      <div className="pcV2__searchSelectLabel">{label}</div>
+  const clearQuery = () => {
+    setQuery("");
+    setOpen(true);
+    requestAnimationFrame(() => inputRef.current?.focus());
+  };
 
-      <input
-        className="pcV2__searchSelectInput"
-        value={query}
-        placeholder="Начните вводить код или название программы"
-        onFocus={() => setOpen(true)}
-        onChange={(e) => {
-          setQuery(e.target.value);
-          setOpen(true);
-        }}
-      />
+  return (
+    <div className="pcUI__searchSelect" ref={wrapRef}>
+      <div className="pcUI__searchSelectLabel">{label}</div>
+
+      <div style={{ position: "relative" }}>
+        <input
+          ref={inputRef}
+          className="pcUI__searchSelectInput"
+          value={query}
+          placeholder="Начните вводить код или название программы"
+          onFocus={() => setOpen(true)}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") setOpen(false);
+          }}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setOpen(true);
+          }}
+          style={{ paddingRight: 38 }}
+        />
+
+        {query.trim().length > 0 && (
+          <button
+            type="button"
+            className="pcV2__searchSelectClear"
+            aria-label="Очистить поиск"
+            title="Очистить"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={clearQuery}
+            style={{
+              position: "absolute",
+              right: 10,
+              top: "50%",
+              transform: "translateY(-50%)",
+            }}
+          >
+            ×
+          </button>
+        )}
+      </div>
 
       {open && (
         <div className="pcV2__searchSelectDropdown">
           {filtered.length === 0 ? (
-            <div className="pcV2__searchSelectEmpty">
-              Ничего не найдено
-            </div>
+            <div className="pcV2__searchSelectEmpty">Ничего не найдено</div>
           ) : (
             filtered.map((p) => {
               const id = String(p.program_id);
@@ -103,14 +136,12 @@ export default function ProgramSearchSelectV2({
                 <button
                   key={id}
                   type="button"
+                  onMouseDown={(e) => e.preventDefault()}
                   onClick={() => pick(id)}
-                  className={
-                    "pcV2__searchSelectItem " +
-                    (active ? "is-active" : "")
-                  }
+                  className={"pcV2__searchSelectItem " + (active ? "is-active" : "")}
                 >
                   <div className="pcV2__searchSelectTitle">
-                    {p.program_title}
+                    {stripIdPrefix(p.program_title)}
                   </div>
                   <div className="pcV2__searchSelectId">ID: {id}</div>
                 </button>

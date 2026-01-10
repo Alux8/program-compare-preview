@@ -1,74 +1,98 @@
 :root {
-  /* =====================
-     COLORS — BRAND
+   /* =====================
+     COLORS — RANEPA-ish
+     (под ranepa.ru: светлый фон + красный акцент)
   ====================== */
 
-  --color-primary: #1f3c88;        /* основной синий РАНХиГС */
-  --color-primary-hover: #162e66;
-  --color-accent: #d71920;         /* красный акцент */
-  --color-accent-soft: #fdeaea;
+   --color-primary: #1f3c88;
+   --color-primary-hover: #162e66;
 
-  --color-text-primary: #1a1a1a;
-  --color-text-secondary: #5a5a5a;
-  --color-text-muted: #8a8a8a;
+   --color-accent: #DF2935;
+   --color-accent-hover: #C13939;
 
-  --color-bg-page: #ffffff;
-  --color-bg-surface: #f7f8fa;
-  --color-bg-soft: #f2f4f8;
+   --color-text-primary: #222222;
+   --color-text-muted: #737373;
 
-  --color-border: #dfe3eb;
-  --color-border-strong: #c9cfdb;
+   --color-bg-page: #ffffff;
+   --color-bg-surface: #f7f8fa;
+   --color-bg-soft: #f2f4f8;
 
-  --color-success: #2e7d32;
-  --color-success-bg: #e8f5e9;
+   --color-border: #dfe3eb;
+   --color-border-strong: #c9cfdb;
 
-  --color-danger: #c62828;
-  --color-danger-bg: #fdecea;
+   --color-success: #2e7d32;
+   --color-success-bg: #e8f5e9;
 
-  /* =====================
+   --color-danger: #c62828;
+   --color-danger-bg: #fdecea;
+
+   --pc-btn-h: 56px;
+   --pc-btn-radius: 28px;
+   --pc-btn-px: 34px;
+
+   /* =====================
      TYPOGRAPHY
+     Важно: не навязываем Inter, берем шрифт сайта.
   ====================== */
 
-  --font-family-base: "Inter", "Arial", sans-serif;
+   --font-family-base: inherit;
 
-  --font-size-xs: 12px;
-  --font-size-sm: 13px;
-  --font-size-base: 14px;
-  --font-size-md: 16px;
-  --font-size-lg: 18px;
-  --font-size-xl: 22px;
+   --font-size-xs: 12px;
+   --font-size-sm: 13px;
+   --font-size-base: 14px;
+   --font-size-md: 16px;
+   --font-size-lg: 18px;
+   --font-size-xl: 22px;
 
-  --line-height-base: 1.45;
-  --line-height-tight: 1.25;
+   --line-height-base: 1.45;
+   --line-height-tight: 1.25;
 
-  --font-weight-regular: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
+   --font-weight-regular: 400;
+   --font-weight-medium: 500;
+   --font-weight-semibold: 600;
 
-  /* =====================
+   /* =====================
      SPACING
   ====================== */
 
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
-  --space-8: 32px;
+   --space-1: 4px;
+   --space-2: 8px;
+   --space-3: 12px;
+   --space-4: 16px;
+   --space-5: 20px;
+   --space-6: 24px;
+   --space-8: 32px;
 
-  /* =====================
+   /* =====================
      RADIUS
   ====================== */
 
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
+   --radius-sm: 8px;
+   --radius-md: 12px;
+   --radius-lg: 16px;
 
-  /* =====================
+   /* =====================
      SHADOWS
   ====================== */
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+   --shadow-sm: 0 6px 18px rgba(0, 0, 0, 0.06);
+   --shadow-md: 0 10px 28px rgba(0, 0, 0, 0.08);
+
+   /* =====================
+     GLASS (soft)
+  ====================== */
+
+   --glass-bg: rgba(255, 255, 255, 0.78);
+   --glass-border: rgba(223, 227, 235, 0.95);
+   --glass-blur: 10px;
+   --glass-highlight: rgba(255, 255, 255, 0.55);
+
+   /* =====================
+     COMPAT ALIASES
+     чтобы не ломались места, где уже используются другие имена
+  ====================== */
+
+   --fs-14: var(--font-size-base);
+   --bg-soft: var(--color-bg-soft);
+   --text: var(--color-text-primary);
 }

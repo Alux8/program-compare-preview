@@ -13,18 +13,20 @@ type Props = {
   rightId: number;
 };
 
-export default function CompareSelectors({
-  programs,
-  leftId,
-  rightId,
-}: Props) {
+export default function CompareSelectors({ programs, leftId, rightId }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const update = (nextLeft: number, nextRight: number) => {
     const sp = new URLSearchParams(searchParams.toString());
-    sp.set("left", String(nextLeft));
-    sp.set("right", String(nextRight));
+
+    // 0 = “не выбрано”
+    if (nextLeft && nextLeft > 0) sp.set("left", String(nextLeft));
+    else sp.delete("left");
+
+    if (nextRight && nextRight > 0) sp.set("right", String(nextRight));
+    else sp.delete("right");
+
     router.push(`/compare?${sp.toString()}`);
     router.refresh();
   };
@@ -35,9 +37,10 @@ export default function CompareSelectors({
         <div className="text-sm text-gray-500">Слева</div>
         <select
           className="w-full border rounded p-2"
-          value={leftId}
+          value={leftId ?? 0}
           onChange={(e) => update(Number(e.target.value), rightId)}
         >
+          <option value={0}>— выберите программу —</option>
           {programs.map((p) => (
             <option key={String(p.program_id)} value={Number(p.program_id)}>
               {p.program_title}
@@ -50,9 +53,10 @@ export default function CompareSelectors({
         <div className="text-sm text-gray-500">Справа</div>
         <select
           className="w-full border rounded p-2"
-          value={rightId}
+          value={rightId ?? 0}
           onChange={(e) => update(leftId, Number(e.target.value))}
         >
+          <option value={0}>— выберите программу —</option>
           {programs.map((p) => (
             <option key={String(p.program_id)} value={Number(p.program_id)}>
               {p.program_title}

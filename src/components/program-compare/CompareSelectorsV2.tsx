@@ -29,7 +29,7 @@ export default function CompareSelectorsV2({
   }
 
   return (
-    <div className="pcV2__selectorsRow">
+    <div className="pcUI__selectorsRow">
       <ProgramSearchSelectV2
         label="Программа 1"
         programs={programs}

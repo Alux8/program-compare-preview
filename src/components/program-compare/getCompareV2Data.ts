@@ -143,7 +143,7 @@ export async function getCompareV2Data() {
         : "—";
     push("subjects", subjects);
 
-    // короткое описание (с фолбэком на длинное)
+    // короткое описание
     const shortDesc = safeStr(p?.ShortDescription);
     push("oprog", valOrDash(shortDesc || p?.OProgramme));
   }

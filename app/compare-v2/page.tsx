@@ -13,11 +13,20 @@ export default async function CompareV2Page({ searchParams }: Props) {
   const page = Number(pageStr ?? "1") || 1;
 
   return (
-    <main style={{ padding: 24 }}>
-      <h1>Program Compare v2</h1>
-      <ProgramCompareV2 page={page} />
+    <main className="mx-auto max-w-6xl px-4 py-6">
+      <header className="mb-5">
+        <h1 className="text-2xl font-semibold text-[#171520]">
+          Сравнение образовательных программ
+        </h1>
+        <p className="mt-2 text-sm text-[#85848B]">
+          Версия 2: данные загружаются server-side.
+          Выберите две программы и сравните параметры. Можно включить только различия.
+        </p>
+      </header>
+
+      <section className="rounded-2xl border border-[#EDEBF2] bg-white p-4 sm:p-4">
+        <ProgramCompareV2 page={page} />
+      </section>
     </main>
   );
 }
-
-

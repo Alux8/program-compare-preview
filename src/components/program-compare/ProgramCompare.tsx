@@ -32,15 +32,21 @@ export default function ProgramCompare() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const safeLeftId = String(searchParams.get("left") ?? "010266");
-  const safeRightId = String(searchParams.get("right") ?? "010621");
+  const safeLeftId = searchParams.get("left") ?? "";
+const safeRightId = searchParams.get("right") ?? "";
 
-  const left = (programs as ProgramRow[]).find(
-    (p) => String(p.program_id) === safeLeftId
-  );
-  const right = (programs as ProgramRow[]).find(
-    (p) => String(p.program_id) === safeRightId
-  );
+
+  const left = safeLeftId
+  ? (programs as ProgramRow[]).find(
+      (p) => String(p.program_id) === safeLeftId
+    )
+  : undefined;
+
+const right = safeRightId
+  ? (programs as ProgramRow[]).find(
+      (p) => String(p.program_id) === safeRightId
+    )
+  : undefined;
 
   // valuesMap[programId][param_key] = value
   const valuesMap: Record<string, Record<string, any>> = {};
@@ -69,6 +75,8 @@ const groupedParams = (params as ParamRow[]).reduce<
   >({});
 
 const [showDiffOnly, setShowDiffOnly] = useState(false);
+const isReady = Boolean(left && right);
+
 
   const toggleSubGroup = (key: string) => {
     setCollapsedSubGroups((prev) => ({
@@ -153,10 +161,10 @@ function isDifferent(leftVal: any, rightVal: any) {
     if (title.includes("отсроч") && title.includes("арм")) {
       const v = String(value).toLowerCase();
       if (["1", "да", "есть", "true"].includes(v)) {
-        return <span className="pc__badge pc__badge--yes">есть</span>;
+        return <span className="pc__badge pc__badge--yes ">Есть</span>;
       }
       if (["0", "нет", "false"].includes(v)) {
-        return <span className="pc__badge pc__badge--no">нет</span>;
+        return <span className="pc__badge pc__badge--no">Нет</span>;
       }
       return "—";
     }
@@ -168,8 +176,10 @@ const rightProgramTitle = right?.program_title ?? "Программа 2";
 const subGroups = Object.keys(groupedParams);
 
   return (
-    <section className="border rounded-lg p-6 space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <section className="pcUI__selectors">
+    {/* ROW: two search selects in 2 columns (V1 layout) */}
+    <div className="pcUI__selectorsRow">
+      <div className="pcUI__searchSelect">
         <ProgramSearchSelect
           label="Программа 1"
           programs={programs as any[]}
@@ -181,7 +191,9 @@ const subGroups = Object.keys(groupedParams);
             router.push(`/compare?${sp.toString()}`);
           }}
         />
+      </div>
 
+      <div className="pcUI__searchSelect">
         <ProgramSearchSelect
           label="Программа 2"
           programs={programs as any[]}
@@ -194,126 +206,145 @@ const subGroups = Object.keys(groupedParams);
           }}
         />
       </div>
-      <div className="flex items-center gap-3 text-sm">
-  <label className="flex items-center gap-2 cursor-pointer select-none">
-    <input
-      type="checkbox"
-      checked={showDiffOnly}
-      onChange={(e) => setShowDiffOnly(e.target.checked)}
-    />
-    <span title="Скрывает параметры, значения которых совпадают">Показать только различия</span>
-  </label>
-</div>
-<div className="pc__desktop">
-      <div className="pc__tableWrap">
-        <DesktopCompareTable>
-        <table className="pc__table">
-          <thead>
-            <tr>
-              <th>Параметр</th>
-              <th>{left?.program_title ?? "Программа 1"}</th>
-              <th>{right?.program_title ?? "Программа 2"}</th>
-            </tr>
-          </thead>
+    </div>
 
-         <tbody>
-  {Object.entries(groupedParams).map(([subgroup, groupParams]) => {
-    const isCollapsed = !!collapsedSubGroups[subgroup];
-    const hasDiffInSubGroup = groupParams.some((p) =>
-    isDifferent(leftValues[p.param_key], rightValues[p.param_key])
-  );
-    if (showDiffOnly && !hasDiffInSubGroup) return null;
-    return (
-      <React.Fragment key={subgroup}>
-        {/* строка ПОДКАТЕГОРИИ */}
-        <tr
-          className="pc__subGroupRow"
-          onClick={() => toggleSubGroup(subgroup)}
-          style={{ cursor: "pointer" }}
-        >
-          <td colSpan={3}>
-            {isCollapsed ? "▶ " : "▼ "}
-            {subgroup}
-          </td>
-        </tr>
+    {/* toggle */}
+    <div className="pcUI__diffToggle">
+      <label className="flex items-center gap-2 cursor-pointer select-none">
+        <input
+          type="checkbox"
+          checked={showDiffOnly}
+          onChange={(e) => setShowDiffOnly(e.target.checked)}
+        />
+        <span title="Скрывает параметры, значения которых совпадают">
+          Показать только различия
+        </span>
+      </label>
+    </div>
 
-        {/* параметры */}
-{!isCollapsed &&
-  groupParams
-    .filter(
-      (p) =>
-        !showDiffOnly ||
-        isDifferent(leftValues[p.param_key], rightValues[p.param_key])
-    )
-    .map((p) => (
-      <tr key={p.param_key}>
-        <td>{p.param_title}</td>
-
-        <td>
-          {formatValue(
-            leftValues[p.param_key],
-            p.param_key,
-            p.param_title
-          )}
-        </td>
-
-        <td>
-          {formatValue(
-            rightValues[p.param_key],
-            p.param_key,
-            p.param_title
-          )}
-        </td>
-      </tr>
-    ))}
-
-      </React.Fragment>
-    );
-  })}
-
-  {/* кнопки */}
-  <tr className="pc__actionsRow">
-    <td />
-    <td>
-      <a
-        href={`https://www.ranepa.ru/bakalavriat/napravleniya-i-programmy/${safeLeftId}/`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="pc__btn"
-      >
-        Подробнее о программе 1
-      </a>
-    </td>
-    <td>
-      <a
-        href={`https://www.ranepa.ru/bakalavriat/napravleniya-i-programmy/${safeRightId}/`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="pc__btn"
-      >
-        Подробнее о программе 2
-      </a>
-    </td>
-  </tr>
-</tbody>
-
-        </table>
-        </DesktopCompareTable>
+    {!isReady ? (
+      <div className="pc__empty">
+        <div className="pc__emptyTitle">Выберите две программы для сравнения</div>
       </div>
-      </div>
-     <div className="pc__mobile">
-  <MobileCompareList
-    leftProgramTitle={left?.program_title ?? "Программа 1"}
-    rightProgramTitle={right?.program_title ?? "Программа 2"}
-    groupedParams={groupedParams}
-    leftValues={leftValues}
-    rightValues={rightValues}
-    formatValue={formatValue}
-    safeLeftId={safeLeftId}
-    safeRightId={safeRightId}
-    showDiffOnly={showDiffOnly}
-  />
-</div>
-    </section>
-  );
+    ) : (
+      <>
+        <div className="pc__desktop">
+          <div className="pc__tableWrap">
+            <DesktopCompareTable>
+              <table className="pc__table">
+                <thead>
+                  <tr>
+                    <th>Параметр</th>
+                    <th>{left?.program_title ?? "Программа 1"}</th>
+                    <th>{right?.program_title ?? "Программа 2"}</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {Object.entries(groupedParams).map(([subgroup, groupParams]) => {
+                    const isCollapsed = !!collapsedSubGroups[subgroup];
+                    const hasDiffInSubGroup = groupParams.some((p) =>
+                      isDifferent(leftValues[p.param_key], rightValues[p.param_key])
+                    );
+
+                    if (showDiffOnly && !hasDiffInSubGroup) return null;
+
+                    return (
+                      <React.Fragment key={subgroup}>
+                        <tr
+                          className={`pc__subGroupRow ${
+                            !isCollapsed ? "pc__subGroupRow--open" : ""
+                          }`}
+                          onClick={() => toggleSubGroup(subgroup)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <td colSpan={3}>
+                            <div className="pc__accordionRow">
+                              <span className="pc__accordionArrow" />
+                              <span className="pc__accordionTitle">{subgroup}</span>
+                            </div>
+                          </td>
+                        </tr>
+
+                        {!isCollapsed &&
+                          groupParams
+                            .filter(
+                              (p) =>
+                                !showDiffOnly ||
+                                isDifferent(
+                                  leftValues[p.param_key],
+                                  rightValues[p.param_key]
+                                )
+                            )
+                            .map((p) => (
+                              <tr key={p.param_key}>
+                                <td>{p.param_title}</td>
+
+                                <td>
+                                  {formatValue(
+                                    leftValues[p.param_key],
+                                    p.param_key,
+                                    p.param_title
+                                  )}
+                                </td>
+
+                                <td>
+                                  {formatValue(
+                                    rightValues[p.param_key],
+                                    p.param_key,
+                                    p.param_title
+                                  )}
+                                </td>
+                              </tr>
+                            ))}
+                      </React.Fragment>
+                    );
+                  })}
+
+                  <tr className="pc__actionsRow">
+                    <td />
+                    <td>
+                      <a
+                        href={`https://www.ranepa.ru/bakalavriat/napravleniya-i-programmy/${safeLeftId}/`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="pc__btn"
+                      >
+                        Подробнее о программе 1
+                      </a>
+                    </td>
+                    <td>
+                      <a
+                        href={`https://www.ranepa.ru/bakalavriat/napravleniya-i-programmy/${safeRightId}/`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="pc__btn"
+                      >
+                        Подробнее о программе 2
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </DesktopCompareTable>
+          </div>
+        </div>
+
+        <div className="pc__mobile">
+          <MobileCompareList
+            leftProgramTitle={left?.program_title ?? "Программа 1"}
+            rightProgramTitle={right?.program_title ?? "Программа 2"}
+            groupedParams={groupedParams}
+            leftValues={leftValues}
+            rightValues={rightValues}
+            formatValue={formatValue}
+            safeLeftId={safeLeftId}
+            safeRightId={safeRightId}
+            showDiffOnly={showDiffOnly}
+          />
+        </div>
+      </>
+    )}
+  </section>
+);
 }

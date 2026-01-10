@@ -127,19 +127,18 @@ export default function MobileCompareListV2({
 
             return (
               <button
-                key={row.key}
-                type="button"
-                className={`pcMobile__subgroup pcMobile__subgroupBtn ${
-                  isOpen ? "is-open" : "is-closed"
-                }`}
-                onClick={() => toggleSubgroup(row.title)}
-                aria-expanded={isOpen}
-              >
-                <span className="pcTable__chevron" aria-hidden="true">
-                  ▼
-                </span>
-                {row.title}
-              </button>
+  key={row.key}
+  type="button"
+  className={`pcMobile__subgroup pcMobile__subgroupBtn pcV2__accordionRow ${
+    isOpen ? "pcV2__accordionRow--open" : ""
+  }`}
+  onClick={() => toggleSubgroup(row.title)}
+  aria-expanded={isOpen}
+>
+  <span className="pcV2__accordionArrow" aria-hidden="true" />
+  <span className="pcV2__accordionTitle">{row.title}</span>
+</button>
+
             );
           }
 

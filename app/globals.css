@@ -1,28 +1,57 @@
+
+@import "tailwindcss";
 @import "./styles/theme/tokens.css";
 @import "./styles/theme/components.css";
-@import "tailwindcss";
+
+
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #171520;
+
+  --surface: #ffffff;
+  --surface-border: #EDEBF2;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  overflow-x: hidden;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Manrope", Arial, Helvetica, sans-serif;
+  margin: 0;
 }
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* =========================
+   Shared UI (V1 + V2)
+   ========================= */
+.pc__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid var(--color-border, #EDEBF2);
+  background: rgba(255, 255, 255, 0.85);
+  color: #171520;
+  white-space: nowrap;
+}
+
+/* universal selectors layout */
+.pcUI__selectors { display: grid; gap: 14px; }
+.pcUI__selectorsRow { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 720px) { .pcUI__selectorsRow { grid-template-columns: 1fr; } }
+.pcUI__searchSelect { min-width: 0; width: 100%; }
+.pcUI__diffToggle { display: flex; align-items: center; gap: 12px; margin: 12px 0; }

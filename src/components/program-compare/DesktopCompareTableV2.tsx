@@ -80,19 +80,18 @@ export default function DesktopCompareTableV2({
 
             rows.push(
               <button
-                key={`sg:${sg}`}
-                type="button"
-                className={`pcTable__subgroup pcTable__subgroupBtn ${
-                  isClosed ? "is-closed" : "is-open"
-                }`}
-                onClick={() => toggleSubgroup(sg)}
-                aria-expanded={!isClosed}
-              >
-                <span className="pcTable__chevron" aria-hidden="true">
-                  ▼
-                </span>
-                {sg}
-              </button>
+  key={`sg:${sg}`}
+  type="button"
+  className={`pcTable__subgroup pcTable__subgroupBtn pcV2__accordionRow ${
+    isClosed ? "" : "pcV2__accordionRow--open"
+  }`}
+  onClick={() => toggleSubgroup(sg)}
+  aria-expanded={!isClosed}
+>
+  <span className="pcV2__accordionArrow" aria-hidden="true" />
+  <span className="pcV2__accordionTitle">{sg}</span>
+</button>
+
             );
           }
 
