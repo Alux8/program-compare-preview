@@ -2,7 +2,10 @@
   "crons": [
     {
       "path": "/api/compare-v2-warm",
-      "schedule": "0 6 * * *"
+      "schedule": "0 6 * * *",
+      "headers": {
+      "x-cron-secret": "pc-v2-warm-2026-super-secret"
+      }
     }
   ]
 }
