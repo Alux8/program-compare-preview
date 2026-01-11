@@ -91,7 +91,7 @@ export default function ProgramSearchSelectV2({
           ref={inputRef}
           className="pcUI__searchSelectInput"
           value={query}
-          placeholder="Начните вводить код или название программы"
+          placeholder="Начните вводить название программы или код"
           onFocus={() => setOpen(true)}
           onKeyDown={(e) => {
             if (e.key === "Escape") setOpen(false);

@@ -26,7 +26,7 @@
 .pc,
 .pcV2 {
   max-width: 100%;
-  overflow-x: clip;
+  overflow-x: hidden;
   color-scheme: light;
   font-family: "Manrope", "Arial", sans-serif;
   font-weight: 400;
@@ -35,7 +35,18 @@
   letter-spacing: 0;
   font-size: 16px;
   line-height: 24px;
+  
   color: #171520;
+  overflow-wrap: break-word;
+  word-wrap: break-word;       
+  word-break: break-word;
+}
+@media (max-width: 720px) {
+  .pcV2 {
+    max-width: 100%;
+    width: 100%;
+    overflow-x: hidden;
+  }
 }
 
 /* ---------------------------------------------------------
@@ -504,6 +515,7 @@
 .pcUI__selectors{
   display: grid;
   gap: 14px;
+  min-width: 0;
 }
 
 .pc__selectorsRow,
@@ -548,16 +560,14 @@
 
 /* Desktop/Mobile switch for V2 */
 .pcV2__mobile {
-  display: none;
+  display: block;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 @media (max-width:720px) {
   .pcV2__desktop {
     display: none;
-  }
-
-  .pcV2__mobile {
-    display: block;
   }
 }
 
@@ -814,7 +824,9 @@
 .pcUI__searchSelectInput,
 .pcV2__searchSelectInput{
   width: 100%;
+  max-width: 100%;
   min-width: 0;
+  overflow: hidden;
   box-sizing: border-box;
 
   height: 46px;

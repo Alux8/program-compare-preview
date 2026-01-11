@@ -38,12 +38,20 @@ function normalizeLink(link?: string) {
   return `https://www.ranepa.ru${link}`;
 }
 
+function stripProgramCode(title: string) {
+  // Убираем префикс вида "000000 — " в начале
+  return title.replace(/^\d+\s*—\s*/, "").trim();
+}
+
 export default function MobileCompareListV2({
   leftProgram,
   rightProgram,
   params,
   valuesMap,
 }: Props) {
+  const leftTitle = stripProgramCode(leftProgram.program_title);
+  const rightTitle = stripProgramCode(rightProgram.program_title);
+
   // список подгрупп в порядке появления
   const subgroupsOrdered = useMemo(() => {
     const out: string[] = [];
@@ -116,8 +124,8 @@ export default function MobileCompareListV2({
           marginBottom: 12,
         }}
       >
-        <div style={{ fontWeight: 600 }}>{leftProgram.program_title}</div>
-        <div style={{ fontWeight: 600 }}>{rightProgram.program_title}</div>
+        <div style={{ fontWeight: 600 }}>{leftTitle}</div>
+        <div style={{ fontWeight: 600 }}>{rightTitle}</div>
       </div>
 
       <div style={{ display: "grid", gap: 10 }}>
@@ -127,18 +135,17 @@ export default function MobileCompareListV2({
 
             return (
               <button
-  key={row.key}
-  type="button"
-  className={`pcMobile__subgroup pcMobile__subgroupBtn pcV2__accordionRow ${
-    isOpen ? "pcV2__accordionRow--open" : ""
-  }`}
-  onClick={() => toggleSubgroup(row.title)}
-  aria-expanded={isOpen}
->
-  <span className="pcV2__accordionArrow" aria-hidden="true" />
-  <span className="pcV2__accordionTitle">{row.title}</span>
-</button>
-
+                key={row.key}
+                type="button"
+                className={`pcMobile__subgroup pcMobile__subgroupBtn pcV2__accordionRow ${
+                  isOpen ? "pcV2__accordionRow--open" : ""
+                }`}
+                onClick={() => toggleSubgroup(row.title)}
+                aria-expanded={isOpen}
+              >
+                <span className="pcV2__accordionArrow" aria-hidden="true" />
+                <span className="pcV2__accordionTitle">{row.title}</span>
+              </button>
             );
           }
 
@@ -168,16 +175,14 @@ export default function MobileCompareListV2({
               >
                 <div>
                   <div style={{ fontSize: 12, color: "#666", marginBottom: 4 }}>
-                    {leftProgram.program_title}
+                    {leftTitle}
                   </div>
-                  <div style={{ whiteSpace: "pre-wrap" }}>
-                    {String(row.left)}
-                  </div>
+                  <div style={{ whiteSpace: "pre-wrap" }}>{String(row.left)}</div>
                 </div>
 
                 <div>
                   <div style={{ fontSize: 12, color: "#666", marginBottom: 4 }}>
-                    {rightProgram.program_title}
+                    {rightTitle}
                   </div>
                   <div style={{ whiteSpace: "pre-wrap" }}>
                     {String(row.right)}

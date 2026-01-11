@@ -24,7 +24,7 @@ export default async function CompareV2Page({ searchParams }: Props) {
         </p>
       </header>
 
-      <section className="rounded-2xl border border-[#EDEBF2] bg-white p-4 sm:p-4">
+      <section className="rounded-2xl border border-[#EDEBF2] bg-white p-0 sm:p-4">
         <ProgramCompareV2 page={page} />
       </section>
     </main>

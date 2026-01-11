@@ -81,7 +81,7 @@ export default function ProgramSearchSelect({
         <input
           className="pcV2__searchSelectInput"
           value={query}
-          placeholder="Начните вводить код или название программы"
+          placeholder="Начните вводить название программы или код"
           onFocus={() => setOpen(true)}
           onChange={(e) => {
             setQuery(e.target.value);

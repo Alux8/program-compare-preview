@@ -37,6 +37,11 @@ export default function DesktopCompareTableV2({
   const leftHref = normalizeLink(leftProgram.program_link);
   const rightHref = normalizeLink(rightProgram.program_link);
 
+  const stripProgramCode = (title: string) => {
+    // Убираем префикс вида "000000 — " в начале
+    return title.replace(/^\d+\s*—\s*/, "").trim();
+  };
+
   // Desktop: по умолчанию все подгруппы открыты -> храним только закрытые
   const [closedSubgroups, setClosedSubgroups] = useState<Set<string>>(
     () => new Set()
@@ -59,10 +64,10 @@ export default function DesktopCompareTableV2({
       <div className="pcTable__head">
         <div className="pcTable__col pcTable__col--param" />
         <div className="pcTable__col pcTable__col--left">
-          {leftProgram.program_title}
+          {stripProgramCode(leftProgram.program_title)}
         </div>
         <div className="pcTable__col pcTable__col--right">
-          {rightProgram.program_title}
+          {stripProgramCode(rightProgram.program_title)}
         </div>
       </div>
 
@@ -80,18 +85,17 @@ export default function DesktopCompareTableV2({
 
             rows.push(
               <button
-  key={`sg:${sg}`}
-  type="button"
-  className={`pcTable__subgroup pcTable__subgroupBtn pcV2__accordionRow ${
-    isClosed ? "" : "pcV2__accordionRow--open"
-  }`}
-  onClick={() => toggleSubgroup(sg)}
-  aria-expanded={!isClosed}
->
-  <span className="pcV2__accordionArrow" aria-hidden="true" />
-  <span className="pcV2__accordionTitle">{sg}</span>
-</button>
-
+                key={`sg:${sg}`}
+                type="button"
+                className={`pcTable__subgroup pcTable__subgroupBtn pcV2__accordionRow ${
+                  isClosed ? "" : "pcV2__accordionRow--open"
+                }`}
+                onClick={() => toggleSubgroup(sg)}
+                aria-expanded={!isClosed}
+              >
+                <span className="pcV2__accordionArrow" aria-hidden="true" />
+                <span className="pcV2__accordionTitle">{sg}</span>
+              </button>
             );
           }
 
