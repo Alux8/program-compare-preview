@@ -164,7 +164,8 @@ function isDifferent(leftVal: any, rightVal: any) {
         return <span className="pc__badge pc__badge--yes ">Есть</span>;
       }
       if (["0", "нет", "false"].includes(v)) {
-        return <span className="pc__badge pc__badge--no">Нет</span>;
+        return <span className="pc__badge pc__badge--no">Нет</span>
+;
       }
       return "—";
     }
@@ -176,10 +177,10 @@ const rightProgramTitle = right?.program_title ?? "Программа 2";
 const subGroups = Object.keys(groupedParams);
 
   return (
-  <section className="pcUI__selectors">
-    {/* ROW: two search selects in 2 columns (V1 layout) */}
-    <div className="pcUI__selectorsRow">
-      <div className="pcUI__searchSelect">
+  <section className="pc__selectors">
+    {/* ROW: two search selects in 2 columns */}
+    <div className="pc__selectorsRow">
+      <div className="pc__searchSelect">
         <ProgramSearchSelect
           label="Программа 1"
           programs={programs as any[]}
@@ -193,7 +194,7 @@ const subGroups = Object.keys(groupedParams);
         />
       </div>
 
-      <div className="pcUI__searchSelect">
+      <div className="pc__searchSelect">
         <ProgramSearchSelect
           label="Программа 2"
           programs={programs as any[]}
@@ -209,7 +210,7 @@ const subGroups = Object.keys(groupedParams);
     </div>
 
     {/* toggle */}
-    <div className="pcUI__diffToggle">
+    <div className="pc__diffToggle">
       <label className="flex items-center gap-2 cursor-pointer select-none">
         <input
           type="checkbox"

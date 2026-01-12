@@ -32,26 +32,3 @@ canvas {
   max-width: 100%;
   height: auto;
 }
-
-/* =========================
-   Shared UI (V1 + V2)
-   ========================= */
-.pc__badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  border: 1px solid var(--color-border, #EDEBF2);
-  background: rgba(255, 255, 255, 0.85);
-  color: #171520;
-  white-space: nowrap;
-}
-
-/* universal selectors layout */
-.pcUI__selectors { display: grid; gap: 14px; }
-.pcUI__selectorsRow { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-@media (max-width: 720px) { .pcUI__selectorsRow { grid-template-columns: 1fr; } }
-.pcUI__searchSelect { min-width: 0; width: 100%; }
-.pcUI__diffToggle { display: flex; align-items: center; gap: 12px; margin: 12px 0; }

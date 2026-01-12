@@ -74,12 +74,12 @@ export default function ProgramSearchSelect({
   };
 
   return (
-    <div className="pcV2__searchSelect" ref={wrapRef}>
-      <div className="pcV2__searchSelectLabel">{label}</div>
+    <div className="pc__searchSelect" ref={wrapRef}>
+      <div className="pc__searchSelectLabel">{label}</div>
 
-      <div className="pcV2__searchSelectField">
+      <div className="pc__searchSelectField">
         <input
-          className="pcV2__searchSelectInput"
+          className="pc__searchSelectInput"
           value={query}
           placeholder="Начните вводить название программы или код"
           onFocus={() => setOpen(true)}
@@ -92,7 +92,7 @@ export default function ProgramSearchSelect({
         {query.length > 0 && (
           <button
             type="button"
-            className="pcV2__searchSelectClear"
+            className="pc__searchSelectClear"
             onClick={clearQuery}
             aria-label="Очистить"
             title="Очистить"
@@ -103,9 +103,9 @@ export default function ProgramSearchSelect({
       </div>
 
       {open && (
-        <div className="pcV2__searchSelectDropdown">
+        <div className="pc__searchSelectDropdown">
           {filtered.length === 0 ? (
-            <div className="pcV2__searchSelectEmpty">Ничего не найдено</div>
+            <div className="pc__searchSelectEmpty">Ничего не найдено</div>
           ) : (
             filtered.map((p) => {
               const id = String(p.program_id);
@@ -116,10 +116,10 @@ export default function ProgramSearchSelect({
                   key={id}
                   type="button"
                   onClick={() => pick(id)}
-                  className={"pcV2__searchSelectItem " + (active ? "is-active" : "")}
+                  className={"pc__searchSelectItem " + (active ? "is-active" : "")}
                 >
-                  <div className="pcV2__searchSelectTitle">{p.program_title}</div>
-                  <div className="pcV2__searchSelectId">ID: {id}</div>
+                  <div className="pc__searchSelectTitle">{p.program_title}</div>
+                  <div className="pc__searchSelectId">ID: {id}</div>
                 </button>
               );
             })

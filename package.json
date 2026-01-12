@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "data:v2": "node scripts/build-compare-v2.mjs",
-    "dev": "npm run data:v2 && next dev",
-    "build": "npm run data:v2 && next build",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
+
   "dependencies": {
     "@sanity/client": "^7.12.1",
     "next": "16.0.10",
