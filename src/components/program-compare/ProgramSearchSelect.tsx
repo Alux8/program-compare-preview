@@ -12,6 +12,7 @@ type Props = {
   programs: ProgramRow[];
   valueId: string;
   onChange: (nextId: string) => void;
+  excludeIds?: Array<string | number>;
 };
 
 export default function ProgramSearchSelect({
@@ -19,11 +20,11 @@ export default function ProgramSearchSelect({
   programs,
   valueId,
   onChange,
+  excludeIds,
 }: Props) {
-  const selected = useMemo(
-    () => programs.find((p) => String(p.program_id) === String(valueId)),
-    [programs, valueId]
-  );
+  const selected = useMemo(() => {
+    return programs.find((p) => String(p.program_id) === String(valueId));
+  }, [programs, valueId]);
 
   const [query, setQuery] = useState(selected?.program_title ?? "");
   const [open, setOpen] = useState(false);
@@ -38,17 +39,35 @@ export default function ProgramSearchSelect({
       if (!wrapRef.current) return;
       if (!wrapRef.current.contains(e.target as Node)) setOpen(false);
     };
+
     document.addEventListener("mousedown", onDocClick);
     return () => document.removeEventListener("mousedown", onDocClick);
   }, []);
 
+  const excludeSet = useMemo(() => {
+    const arr = excludeIds ?? [];
+    return new Set(arr.map((x) => String(x)));
+  }, [excludeIds]);
+
+  // Программы, доступные для выбора:
+  // - скрываем исключённые
+  // - но НЕ скрываем текущую выбранную (на случай, если excludeIds обновится)
+  const availablePrograms = useMemo(() => {
+    const currentId = String(valueId ?? "");
+    return programs.filter((p) => {
+      const id = String(p.program_id);
+      if (excludeSet.has(id) && id !== currentId) return false;
+      return true;
+    });
+  }, [programs, excludeSet, valueId]);
+
   const sortedPrograms = useMemo(() => {
-    return [...programs].sort((a, b) =>
+    return [...availablePrograms].sort((a, b) =>
       a.program_title.localeCompare(b.program_title, "ru", {
         sensitivity: "base",
       })
     );
-  }, [programs]);
+  }, [availablePrograms]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();

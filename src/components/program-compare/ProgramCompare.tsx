@@ -185,6 +185,7 @@ const subGroups = Object.keys(groupedParams);
           label="Программа 1"
           programs={programs as any[]}
           valueId={safeLeftId}
+          excludeIds={safeRightId ? [safeRightId] : []}
           onChange={(nextId) => {
             const sp = new URLSearchParams(searchParams.toString());
             sp.set("left", String(nextId));
@@ -199,6 +200,7 @@ const subGroups = Object.keys(groupedParams);
           label="Программа 2"
           programs={programs as any[]}
           valueId={safeRightId}
+          excludeIds={safeLeftId ? [safeLeftId] : []}
           onChange={(nextId) => {
             const sp = new URLSearchParams(searchParams.toString());
             sp.set("left", String(safeLeftId));

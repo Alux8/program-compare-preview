@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import xlsx from "xlsx";
 
-const INPUT = path.resolve("data/Тестируем ALUX.xlsx");
+const INPUT = path.resolve("data/Программы в набор 2026.xlsx");
 
 const OUT_DIR = path.resolve("src/data/compare");
 const OUT_PROGRAMS = path.join(OUT_DIR, "programs.json");

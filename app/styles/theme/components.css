@@ -236,6 +236,11 @@
   }
 }
 
+/* search select field: anchor for Clear (X) button */
+.pc__searchSelectField {
+  position: relative;
+}
+
 /* Clear (X) button — remove outline/border (both versions if class exists) */
 
 .pc__searchSelectClear {
@@ -265,7 +270,6 @@
   background: #f3f4f6;
 }
 /* ===== ACCORDION ARROW (RANEPA) ===== */
-/* V1 */
 .pc__accordionRow{
   display:flex;
   align-items:center;
@@ -293,7 +297,7 @@
   font-weight:600;
 }
 
-/* ===== SEARCH SELECT (single source of truth; V1 + V2) ===== */
+/* ===== SEARCH SELECT ===== */
 
 /* container */
 .pc__searchSelect {
